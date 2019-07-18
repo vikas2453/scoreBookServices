@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.mindtree.poc.JcachePoc.model.User;
-import com.mindtree.poc.JcachePoc.repo.UserRepo;
+import com.fun.learning.model.User;
+import com.fun.learning.repo.UserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 

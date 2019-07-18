@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mindtree.poc.JcachePoc.model.User;
-import com.mindtree.poc.JcachePoc.service.UserDetailsServiceJDBC;
+import com.fun.learning.model.User;
+import com.fun.learning.service.UserDetailsServiceJDBC;
 
 @Controller
 public class UserController {
