@@ -1,4 +1,4 @@
-package com.fun.school;
+package com.fun.learning;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

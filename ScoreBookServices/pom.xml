@@ -64,10 +64,9 @@
 			<optional>true</optional>
 		</dependency>
 		
-		<!--  Database connection Pooling -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		
 		<!-- So that you  don't have  to create setters and getters -->

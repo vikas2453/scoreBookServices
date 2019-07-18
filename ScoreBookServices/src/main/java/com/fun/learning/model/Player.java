@@ -1,4 +1,4 @@
-package com.fun.school.model;
+package com.fun.learning.model;
 
 import java.time.LocalTime;
 
