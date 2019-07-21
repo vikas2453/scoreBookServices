@@ -8,17 +8,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @Order(97)
-public class AllowAllSecurityConfig  extends WebSecurityConfigurerAdapter{
+public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.antMatcher("/h2/**").authorizeRequests().anyRequest().permitAll();
-				
+		//permitAll reqeusts mentioned in ant matchers
+		//other request must be authenticated with form login
+		httpSecurity.authorizeRequests().antMatchers("/h2/**", "/register").permitAll()
+		.anyRequest().authenticated()
+		.and().formLogin();
+
 		httpSecurity.csrf().disable();
 		httpSecurity.headers().frameOptions().disable();
 	}
-	
+
+	/*
+	 * Below method can also be used to ingore some of urls by websecurity or
+	 * basically to ingore css or other static html content
+	 * 
+	 */
+
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-	    web.ignoring().antMatchers("/user", "/furtheurls");
+		web.ignoring().antMatchers("/css/**", "/anyotherURLs", "/orAnyOtherStaticContent");
 	}
 }

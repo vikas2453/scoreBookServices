@@ -10,14 +10,22 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.fun.learning.validator.UniqueEmail;
+import com.fun.learning.validator.UniqueUsername;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Data
@@ -25,17 +33,47 @@ import lombok.ToString;
 @ToString
 @Component
 @NoArgsConstructor
-//@Slf4j
+@RequiredArgsConstructor
+// @Slf4j
 public class User implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
+	@NonNull
+	@NotEmpty(message = "Please enter username")
+	@UniqueUsername
 	private String username;
-	//public static final short maxLoginFailedAttempt = 3;
+
+	@NonNull
+	@Size(min = 2, max = 15, message = "name must between 1 and 4 characters")
+	@NotEmpty(message = "Please enter FirstName")
+	private String firstName;
+
+	@NonNull
+	private String lastName;
+
+	@NotEmpty
+	@Email(message = "Email is not validssss")
+	@UniqueEmail
+	@NonNull
+	private String email;
+
+	// public static final short maxLoginFailedAttempt = 3;
 	private int loginFailedAttempt = 0;
 	@NotEmpty
+	@NonNull
 	private String password;
 
-	private String emailaddress;
+	@Transient
+	private String confirmPassword;
+
+	@NonNull
+	private Gender gender;
+
 	private String securityQuestion;
 	private String securityAnswer;
 	private Date lastLoggedIn;
@@ -78,10 +116,10 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		/*log.debug("maxLoginFailedAttempt" + maxLoginFailedAttempt);
-		if (this.loginFailedAttempt >= maxLoginFailedAttempt) {
-			return false;
-		}*/
+		/*
+		 * log.debug("maxLoginFailedAttempt" + maxLoginFailedAttempt); if
+		 * (this.loginFailedAttempt >= maxLoginFailedAttempt) { return false; }
+		 */
 		return accountNonLocked;
 	}
 
@@ -96,4 +134,48 @@ public class User implements UserDetails {
 		return enabled;
 	}
 
+	public static class UserBuilder {
+		private String username;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private String password;
+		private Gender gender;
+
+		public UserBuilder username(String username) {
+			this.username = username;
+			return this;
+		}
+
+		public UserBuilder firstName(String firstName) {
+			this.firstName = firstName;
+			return this;
+		}
+
+		public UserBuilder lastName(String lastName) {
+			this.lastName = lastName;
+			return this;
+		}
+
+		public UserBuilder email(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public UserBuilder password(String password) {
+			this.password = password;
+			return this;
+		}
+
+		public UserBuilder gender(Gender gender) {
+			this.gender = gender;
+			return this;
+		}
+
+		public User Build() {
+			User user = new User(username,firstName, lastName, email,password, gender);
+			return user;
+		}
+
+	}
 }
