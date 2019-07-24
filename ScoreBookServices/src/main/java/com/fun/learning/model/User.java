@@ -19,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.fun.learning.validator.ConfirmPassword;
 import com.fun.learning.validator.UniqueEmail;
 import com.fun.learning.validator.UniqueUsername;
 
@@ -35,6 +36,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @RequiredArgsConstructor
 // @Slf4j
+@ConfirmPassword
 public class User implements UserDetails {
 
 	/**
@@ -53,6 +55,7 @@ public class User implements UserDetails {
 	@NotEmpty(message = "Please enter FirstName")
 	private String firstName;
 
+	@NotEmpty(message = "Please enter FirstName")
 	@NonNull
 	private String lastName;
 
