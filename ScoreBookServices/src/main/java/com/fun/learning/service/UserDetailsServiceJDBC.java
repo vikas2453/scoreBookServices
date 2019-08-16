@@ -1,9 +1,10 @@
 package com.fun.learning.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fun.learning.model.User;
@@ -16,8 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 // There can be different implementation of userDetailsService like LDAP of from other identity store. 
 public class UserDetailsServiceJDBC implements UserDetailsService  {
 	
-	@Autowired 
-	private BCryptPasswordEncoder passwordEncoder;
+	@Autowired
+	@Qualifier("myPasswordEncoder")
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	UserRepo userRepo;

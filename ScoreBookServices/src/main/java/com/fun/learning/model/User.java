@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.fun.learning.validator.ConfirmPassword;
+import com.fun.learning.validator.Password;
 import com.fun.learning.validator.UniqueEmail;
 import com.fun.learning.validator.UniqueUsername;
 
@@ -69,6 +70,7 @@ public class User implements UserDetails {
 	private int loginFailedAttempt = 0;
 	@NotEmpty
 	@NonNull
+	@Password
 	private String password;
 
 	@Transient

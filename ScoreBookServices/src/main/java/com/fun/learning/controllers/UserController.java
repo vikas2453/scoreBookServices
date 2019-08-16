@@ -53,6 +53,13 @@ public class UserController {
 		return model;
 	}
 	
+	@GetMapping("/registerTest")
+	public String registerTest() {
+		return "This requires authentication";
+	}
+	
+
+	
 	
 	@PostMapping("/register")
 	public ModelAndView addUser(ModelAndView model, 
@@ -62,7 +69,10 @@ public class UserController {
 		if (result.hasErrors()) {	        
 	         return model;
 	      }		
-		
+		user.setAccountNonLocked(true);
+		user.setEnabled(true);
+		user.setAccountNonExpired(true);
+		user.setCredentialsNonExpired(true);
 		userDetailService.addUser(user);
 		model.setViewName("registerSuccessful");
 		return model;

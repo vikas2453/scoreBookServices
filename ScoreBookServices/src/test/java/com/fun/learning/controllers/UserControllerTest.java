@@ -77,8 +77,9 @@ public class UserControllerTest {
 		mockMvc.perform(post("/register").param("firstName", "Vikas").param("lastName", "Chaudhary")
 				.param("password", "password1").param("confirmPassword", "password2").param("email", "vika2453@gmail.com")
 				.param("username", "user").param("gender", "Male"))
-		.andExpect(view().name("register"));
-		//.andExpect(model().attributeHasFieldErrors("user",  "confirmPassword"));
+		.andExpect(view().name("register"))
+		.andExpect(model().attributeHasErrors("user"));
+		
 	}
 
 }
