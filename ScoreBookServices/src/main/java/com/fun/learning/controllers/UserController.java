@@ -3,6 +3,7 @@ package com.fun.learning.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,20 +11,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fun.learning.event.UserRegistrationEvent;
 import com.fun.learning.model.User;
 import com.fun.learning.service.UserDetailsServiceJDBC;
 import com.fun.learning.validator.UserValidator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
 	@Autowired
 	UserDetailsServiceJDBC userDetailService;
 	@Autowired
 	private UserValidator userValidator;
+	private final ApplicationEventPublisher eventPublisher;
 
 	
 	/* initBinder, UserValidator and valiationPropoperties is an example of custom validator 
@@ -70,10 +75,10 @@ public class UserController {
 	         return model;
 	      }		
 		user.setAccountNonLocked(true);
-		user.setEnabled(true);
 		user.setAccountNonExpired(true);
 		user.setCredentialsNonExpired(true);
 		userDetailService.addUser(user);
+		eventPublisher.publishEvent(new UserRegistrationEvent(user));
 		model.setViewName("registerSuccessful");
 		return model;
 

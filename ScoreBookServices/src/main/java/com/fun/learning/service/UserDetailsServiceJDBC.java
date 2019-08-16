@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fun.learning.model.User;
 import com.fun.learning.repo.UserRepo;
@@ -28,13 +29,15 @@ public class UserDetailsServiceJDBC implements UserDetailsService  {
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userRepo.findByUsername(username);
 	}
-		
+	
+	@Transactional
 	public void updateLoginAttempt(User user, Boolean success) {		 
 		if (success) {
 			user.setLoginFailedAttempt(0);
 		} else {
 			user.setLoginFailedAttempt(user.getLoginFailedAttempt() + 1);
 		}
+		userRepo.saveAndFlush(user);
 	}
 	
 	public boolean userIdTaken(String userId) {
