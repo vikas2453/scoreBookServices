@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-public class UserController {
+public class RegisterController {
 
 	@Autowired
 	UserDetailsServiceJDBC userDetailService;
@@ -78,7 +78,13 @@ public class UserController {
 		user.setAccountNonExpired(true);
 		user.setCredentialsNonExpired(true);
 		userDetailService.addUser(user);
-		eventPublisher.publishEvent(new UserRegistrationEvent(user));
+		try {
+			eventPublisher.publishEvent(new UserRegistrationEvent(user));
+		}
+		catch(Exception ex) {
+			user.setEnabled(true);
+			log.debug("publishing event failed", ex);
+		}
 		model.setViewName("registerSuccessful");
 		return model;
 

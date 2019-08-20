@@ -11,4 +11,6 @@ public class HomeController {
 	public String getHomeMessage() {
 		 return "This is home page and requires authentication";
 	}
+	
+	
 }

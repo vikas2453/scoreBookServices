@@ -26,6 +26,7 @@ public class UserDetailsServiceJDBC implements UserDetailsService  {
 	UserRepo userRepo;
 
 	@Override
+	@Transactional
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userRepo.findByUsername(username);
 	}
@@ -47,6 +48,7 @@ public class UserDetailsServiceJDBC implements UserDetailsService  {
 
 	public boolean addUser(User user) {		
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPin(passwordEncoder.encode(user.getPin()));
 		 if(userRepo.save(user)!=null)
 			 return true;
 		 return false;

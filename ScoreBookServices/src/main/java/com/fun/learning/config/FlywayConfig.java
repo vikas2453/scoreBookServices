@@ -23,6 +23,7 @@ public class FlywayConfig {
             flyway.setLocations(new String[] { config.getSqlLocation() });
             flyway.setBaselineOnMigrate(true);
             // *******************flyway.clean(); ********************//// this will wipe out the DB, be careful
+            flyway.repair();
           flyway.migrate();
         return  flyway;
 

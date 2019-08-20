@@ -102,11 +102,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-
+		
+		<!--  Google MF Authenticator -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
+			<groupId>com.warrenstrange</groupId>
+			<artifactId>googleauth</artifactId>
+			<version>1.2.0</version>
 		</dependency>
 
 

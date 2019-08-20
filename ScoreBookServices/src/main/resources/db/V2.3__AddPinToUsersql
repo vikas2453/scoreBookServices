@@ -1,0 +1,1 @@
+Alter table USER add column pin varchar(120);

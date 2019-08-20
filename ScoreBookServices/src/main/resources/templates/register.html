@@ -49,6 +49,15 @@
                   <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">..</span>
                </td>
             </tr>
+            
+             <tr>
+               <td>Pin</td>
+               <td><input type="password" th:field="*{pin}" /> </td>
+               <td>
+                  <span th:if="${#fields.hasErrors('pin')}" th:errors="*{pin}">..</span>
+               </td>
+            </tr>
+            
             <tr>
                <td>Email</td>
                <td><input type="text" th:field="*{email}" /> </td>
@@ -56,6 +65,7 @@
                   <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">..</span>
                </td>
             </tr>
+            
             <tr>
                <td>First Name</td>
                <td><input type="text" th:field="*{firstName}" /> </td>
@@ -63,6 +73,7 @@
                   <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">..</span>
                </td>
             </tr>
+            
             <tr>
                <td>Last Name</td>
                <td><input type="text" th:field="*{lastName}" /> </td>
@@ -70,6 +81,7 @@
                   <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">..</span>
                </td>
             </tr>
+            
             <tr>
                <td>Gender</td>
                <td>
@@ -92,6 +104,7 @@
                </td>
                <td>&nbsp;</td>
             </tr>
+            
          </table>
       </form>
        

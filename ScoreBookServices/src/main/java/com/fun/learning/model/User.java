@@ -72,6 +72,8 @@ public class User implements UserDetails {
 	@NonNull
 	@Password
 	private String password;
+	
+	private String pin;
 
 	@Transient
 	private String confirmPassword;
