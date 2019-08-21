@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fun.learning.model.User;
 import com.fun.learning.repo.UserRepo;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,12 +21,17 @@ import lombok.extern.slf4j.Slf4j;
 // There can be different implementation of userDetailsService like LDAP of from other identity store. 
 public class UserDetailsServiceJDBC implements UserDetailsService  {
 	
+	private final static String ISSUER="ScoreBookService";
+	
 	@Autowired
 	@Qualifier("myPasswordEncoder")
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	UserRepo userRepo;
+	
+	
+	private GoogleAuthenticator googleAuth = new GoogleAuthenticator();
 
 	@Override
 	@Transactional
@@ -53,5 +61,18 @@ public class UserDetailsServiceJDBC implements UserDetailsService  {
 			 return true;
 		 return false;
 		
+	}
+
+	public boolean isMFAEnabled(String  username) {
+		User user = loadUserByUsername(username);
+		return user.isMFAEnabled();
+	}
+
+	public Object generateNewGoogleAuthQRUrl(String username) {
+		GoogleAuthenticatorKey  authKey= googleAuth.createCredentials();
+		String secret = authKey.getKey();
+		User user= loadUserByUsername(username);
+		user.getTOTPDetails().setSecret(secret);
+		return GoogleAuthenticatorQRGenerator.getOtpAuthURL(ISSUER, username, authKey);
 	}
 }

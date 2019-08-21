@@ -1,5 +1,9 @@
 package com.fun.learning.config;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +19,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 
 @Configuration
 @Order(97)
 public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
+	private static List<String> clients = Arrays.asList("google", "facebook");
+
 	@Autowired
 	private AdditionAuthenticationProvider additionAuthenticationProvider;
+
+	@Autowired
+	@Qualifier("oAuth2successHandler")
+	private OAuth2AuthenticationSuccessHandler oAuth2successHandler;
 
 	public void configure(HttpSecurity httpSecurity) throws Exception {
 		// permitAll reqeusts mentioned in ant matchers
@@ -29,7 +42,7 @@ public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.authorizeRequests().antMatchers("/h2/**", "/register").permitAll().anyRequest().authenticated()
 				.and().formLogin().loginPage("/login")
 				.authenticationDetailsSource(new AdditionalAuthenticationDetailSource()).permitAll().and().logout()
-				.permitAll();
+				.permitAll().and().oauth2Login().loginPage("/login").successHandler(oAuth2successHandler);
 
 		// this line though enables us to view h2 database, however it is dangerous as
 		// it can result in crossSiteForgeryProtection completely
@@ -79,9 +92,17 @@ public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 		daoAuthenticationProvider.setUserDetailsService(userDetailsServiceJDBC);
 		return daoAuthenticationProvider;
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder authBuilder) {
 		authBuilder.authenticationProvider(additionAuthenticationProvider);
 	}
+
+	/*@Bean
+	public ClientRegistrationRepository clientRegistrationRepository() {
+		List<ClientRegistration> registrations = clients.stream().map(c -> getRegistration(c))
+				.filter(registration -> registration != null).collect(Collectors.toList());
+
+		return new InMemoryClientRegistrationRepository(registrations);
+	}*/
 }

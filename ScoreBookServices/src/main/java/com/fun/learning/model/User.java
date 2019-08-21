@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -89,9 +90,13 @@ public class User implements UserDetails {
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
+	private boolean MFAEnabled;
 
 	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	private List<Authority> authorityList = new ArrayList<>();
+	
+	@OneToOne (mappedBy = "user", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	private TOTPDetails TOTPDetails;
 
 	private String userType;
 

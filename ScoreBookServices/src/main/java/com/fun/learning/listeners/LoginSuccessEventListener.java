@@ -29,12 +29,15 @@ public class LoginSuccessEventListener implements ApplicationListener<Authentica
 
 	@Override
 	public void onApplicationEvent(AuthenticationSuccessEvent event) {
-
-		User user = (User) event.getAuthentication().getPrincipal();
-
-		if (user.getLoginFailedAttempt() > 0) {
-			log.debug("updating login attempt for user:{})", user.getUsername());
-			userDetailsService.updateLoginAttempt(user, true);
+		
+		Object obj=event.getAuthentication().getPrincipal();
+		
+		if(obj instanceof User) {
+			User user = (User) obj;	
+			if (user.getLoginFailedAttempt() > 0) {
+				log.debug("updating login attempt for user:{})", user.getUsername());
+				userDetailsService.updateLoginAttempt(user, true);
+			}
 		}
 
 	}
