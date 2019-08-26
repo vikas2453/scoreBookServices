@@ -10,12 +10,12 @@ import javax.persistence.ManyToOne;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 
 @Data
 @Entity
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class Authority implements GrantedAuthority{
 	
 	@Id 

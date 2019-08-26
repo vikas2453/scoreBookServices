@@ -30,6 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.ToString.Exclude;
 
 @Data
 @Entity
@@ -93,10 +94,11 @@ public class User implements UserDetails {
 	private boolean MFAEnabled;
 
 	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@Exclude
 	private List<Authority> authorityList = new ArrayList<>();
 	
-	@OneToOne (mappedBy = "user", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-	private TOTPDetails TOTPDetails;
+	// for Google MFA authentication
+	private String secret;
 
 	private String userType;
 

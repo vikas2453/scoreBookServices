@@ -2,13 +2,13 @@ package com.fun.learning.config;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,13 +19,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @Order(97)
-public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static List<String> clients = Arrays.asList("google", "facebook");
 
@@ -35,14 +33,26 @@ public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	@Qualifier("oAuth2successHandler")
 	private OAuth2AuthenticationSuccessHandler oAuth2successHandler;
+	
+	@Autowired
+	private TotpAuthenticationFilter totpAuthenticationFilter;
 
 	public void configure(HttpSecurity httpSecurity) throws Exception {
-		// permitAll reqeusts mentioned in ant matchers
-		// other request must be authenticated with form login
-		httpSecurity.authorizeRequests().antMatchers("/h2/**", "/register").permitAll().anyRequest().authenticated()
-				.and().formLogin().loginPage("/login")
-				.authenticationDetailsSource(new AdditionalAuthenticationDetailSource()).permitAll().and().logout()
-				.permitAll().and().oauth2Login().loginPage("/login").successHandler(oAuth2successHandler);
+		//@formatter:off
+		httpSecurity.addFilterBefore(totpAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
+		// permitAll reqeusts mentioned in ant matchers		
+		authorizeRequests().antMatchers("/h2/**", "/register", "/login", "/qrCode").permitAll()
+		// Any request must be authenticated with form login
+		//.anyRequest().authenticated()
+		//Any request with role user will have access to all the pages of sites
+		
+		.antMatchers("totp-login", "totp-login-error").hasAnyRole("Totp_Auth")
+		.anyRequest().hasRole("user")
+		.and().formLogin().loginPage("/login").successHandler(new AuthenticationSuccessHandlerImlp()).failureUrl("/login-error")
+		.authenticationDetailsSource(new AdditionalAuthenticationDetailSource()).and().logout()
+		
+		// OAuth2LoginPage and it successhandler
+		.and().oauth2Login().loginPage("/login").successHandler(oAuth2successHandler);
 
 		// this line though enables us to view h2 database, however it is dangerous as
 		// it can result in crossSiteForgeryProtection completely
@@ -60,6 +70,7 @@ public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 		// next line which allows framing from the same origin only.
 		// httpSecurity.headers().frameOptions().disable();
 		httpSecurity.headers().frameOptions().sameOrigin();
+		//@formatter:on
 	}
 
 	/*
@@ -73,14 +84,7 @@ public class AllowAllSecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/css/**", "/anyotherURLs", "/orAnyOtherStaticContent");
 	}
 
-	@Bean(name = "myPasswordEncoder")
-	public PasswordEncoder getPasswordEncoder() {
-		DelegatingPasswordEncoder delPasswordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories
-				.createDelegatingPasswordEncoder();
-		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
-		delPasswordEncoder.setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
-		return delPasswordEncoder;
-	}
+	
 
 	@Bean
 	@Autowired

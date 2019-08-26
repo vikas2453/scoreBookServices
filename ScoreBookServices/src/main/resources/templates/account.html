@@ -5,44 +5,27 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 </head>
 <body>
-	<div class="container">
-	<div th:if="${param.logout}" class="alert alert-info">You have been logged out</div>
-		<div th:if="${param.error}" class="alert alert-danger">There was an error, please try again</div>
-
-	
-		
-		<h1 class="col-sm-12">Login</h1>
-		<form th:action="@{/login}" method="POST" >
-			<div class="row col-sm-6">
-				<div class="form-group">
-					<label class="col-sm-3">Username</label> 
-					 <td><input type="text" name="username" /></td>
-				</div>
-                <br/>
-				<div class="form-group">
-					<label class="col-sm-3">Password</label> 
-					 <td><input type="password" name="password" /> </td>
-				</div>
-				
-				<div class="form-group">
-					<label class="col-sm-3">Pin</label> 
-					 <td><input type="password" name="pin" /> </td>
-				</div>
-
-				<div class="col-sm-12">
+	<form th:action="@{/authenticator-url}" method="POST">
+		<table class="table table-borderless">
+			<tbody th:if="${qrUrl !=  null}">
+				<tr>
+					<td> Use your Google Authenticator app, to scan the the QR code<br>
+						<img alt="QR Code" th:src="${qrUrl}">
+					</td>
+					<td></td>					
+				</tr>
+				<tr>
 					<td>
-		                  <input type="submit" value="Submit" />
-		                  <a th:href="@{/}">Cancel</a>
-               		</td>
-				</div>
-			</div>
-		</form>
-		<div class="clearfix"></div>
-        <br/>
-        <br/>
-		
-		
-		
-	</div>
+						<p th:if="${confirmError}" class="error"> wrong code, try again </p>
+						<input type="text" th:field="*{code}" placeholder ="Verification Code"/> <br>
+						<button type="submit" class="signupbtn signup_btn"> Enable MFA</button>
+					
+					</td>
+					<td></td>					
+					
+				</tr>
+			</tbody>
+		</table>	
+	</form>
 </body>
 </html>

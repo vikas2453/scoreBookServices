@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title> Login</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+</head>
+<body>
+	<div class ="container">
+	 <div class ="row justify-content-center">
+		<h1 class="text-center login-title"> Submit your verificaiton code</h1>
+		<p th:if="${loginError}" class="error"> Wrong authorization code</p>
+		<div class="account-wall">
+			<form class="form-signin" th:action="@{/login}" method= "post">
+			 <input type ="password" name="totp_code" class="form-control" placeholder="verificaiton code" required autofocus>
+			 <button class="btn btn-lg btn-primary btn-block signup_btn" type="submit"> Sign in</button>
+			 </form>
+			 
+		</div>
+		</div>
+	</div>	
+</body>
+</html>

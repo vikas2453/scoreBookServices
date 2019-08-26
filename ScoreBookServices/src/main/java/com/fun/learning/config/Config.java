@@ -17,6 +17,14 @@ public class Config {
 	@Value("${flyway.sqlLocation}")
 	private String sqlLocation;
 	
+	@Bean(name = "myPasswordEncoder")
+	public PasswordEncoder getPasswordEncoder() {
+		DelegatingPasswordEncoder delPasswordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories
+				.createDelegatingPasswordEncoder();
+		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+		delPasswordEncoder.setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
+		return delPasswordEncoder;
+	}
 	
 	
 }
