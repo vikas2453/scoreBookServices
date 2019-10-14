@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fun.learning</groupId>
-	<artifactId>ScoreBookServices</artifactId>
+	<artifactId>AuthNRegistrationServices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ScoreBookServices</name>
 	<description>Demo project for Spring Config client</description>

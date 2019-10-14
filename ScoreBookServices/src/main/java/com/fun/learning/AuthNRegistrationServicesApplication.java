@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ScoreBookServicesApplication {
+public class AuthNRegistrationServicesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ScoreBookServicesApplication.class, args);
+		SpringApplication.run(AuthNRegistrationServicesApplication.class, args);
 	}
 
 }
