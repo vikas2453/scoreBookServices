@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 	
 	
-	@RequestMapping("/home")
+	@RequestMapping({"/home", "/"})
 	public String getHomeMessage() {
 		 return "This is home page and requires authentication";
 	}

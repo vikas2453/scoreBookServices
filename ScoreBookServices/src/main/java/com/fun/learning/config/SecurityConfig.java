@@ -41,13 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//@formatter:off
 		httpSecurity.addFilterBefore(totpAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
 		// permitAll reqeusts mentioned in ant matchers		
-		authorizeRequests().antMatchers("/h2/**", "/register", "/login", "/qrCode").permitAll()
-		// Any request must be authenticated with form login
-		//.anyRequest().authenticated()
-		//Any request with role user will have access to all the pages of sites
+		authorizeRequests().antMatchers("/h2/**", "/register", "/login/**", "/qrCode").permitAll()	
+		
 		
 		.antMatchers("totp-login", "totp-login-error").hasAnyRole("Totp_Auth")
-		.anyRequest().hasRole("user")
+		//Any request with role user will have access to all the pages of sites
+		.anyRequest().hasAnyRole("USER")
+		// Any request must be authenticated with form login
 		.and().formLogin().loginPage("/login").successHandler(new AuthenticationSuccessHandlerImlp()).failureUrl("/login-error")
 		.authenticationDetailsSource(new AdditionalAuthenticationDetailSource()).and().logout()
 		
